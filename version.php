@@ -27,5 +27,5 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'tool_copy_courses';
 $plugin->release = '1.0';
 $plugin->version = 2024070501;
-$plugin->requires = 2021051700;
-$plugin->maturity = MATURITY_ALPHA;
+$plugin->requires = 2023042400;
+$plugin->maturity = MATURITY_STABLE;
