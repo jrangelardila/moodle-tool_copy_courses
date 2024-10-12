@@ -61,7 +61,7 @@ if (optional_param('execute', null, PARAM_BOOL)) {
             'return_site' => new moodle_url('/admin/tool/copy_courses/index.php'),
         ];
 
-        echo $OUTPUT->render_from_template('tool_copy_courses/index', $templatecontext);    
+        echo $OUTPUT->render_from_template('tool_copy_courses/index', $templatecontext);
 
     } else {
 

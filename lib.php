@@ -11,9 +11,11 @@
 use tool_copy_courses\managment_copy_courses;
 
 defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->libdir . '/csvlib.class.php');
-require_once(__DIR__. '/classes/managment_copy_courses.class.php');
+require_once(__DIR__ . '/classes/managment_copy_courses.class.php');
+require_once($CFG->libdir . '/filelib.php');
 
 /**
  * Plugin administration pages are defined here.
@@ -28,6 +30,7 @@ require_once(__DIR__. '/classes/managment_copy_courses.class.php');
  * Retornar la data del archivo
  * @param $form
  * @param $formdata
+ * @throws moodle_exception
  */
 function tool_copy_courses_validate_file($form, $formdata)
 {
@@ -41,10 +44,10 @@ function tool_copy_courses_validate_file($form, $formdata)
     $sorted_columns = $columns;
     sort($sorted_columns);
     if (sizeof($sorted_columns) != sizeof(\tool_copy_courses\managment_copy_courses::$validator)) {
-        print_error(get_string("error_num_columns", "tool_copy_courses"));
+        throw new \moodle_exception('error_num_columns', 'tool_copy_courses');
     }
     if ($sorted_columns != \tool_copy_courses\managment_copy_courses::$validator) {
-        print_error(get_string("error_in_columns", "tool_copy_courses"));
+        throw new \moodle_exception('error_in_columns', 'tool_copy_courses');
     }
 
 
@@ -74,7 +77,7 @@ function tool_copy_courses_validate_file($form, $formdata)
     }
     echo html_writer::table($table);
 
-    set_config('data_validate', serialize($data), 'tool_copy_courses');
+    tool_copy_courses_save_file(json_encode($data));
 }
 
 /**
@@ -85,7 +88,8 @@ function tool_copy_courses_validate_file($form, $formdata)
  */
 function tool_copy_courses_execute()
 {
-    $data = unserialize(get_config('tool_copy_courses', 'data_validate'));
+
+    $data = tool_copy_courses_get_file();
     foreach ($data as $item) {
         $copy = new managment_copy_courses(
             $item[0], $item[1], $item[2], $item[3], $item[4], $item[5], $item[6]
@@ -93,6 +97,98 @@ function tool_copy_courses_execute()
 
         $copy->created_task();
     }
-    set_config('data_validate', '', 'tool_copy_courses');
+}
+
+
+/**
+ * Guardar el archivo json de manera temporal
+ * @param $content
+ * @return void
+ * @throws dml_exception
+ * @throws file_exception
+ * @throws stored_file_creation_exception
+ */
+function tool_copy_courses_save_file($content)
+{
+
+    tool_copy_courses_delete_file();
+
+    $context = context_system::instance();
+
+    $file_storage = get_file_storage();
+
+    $file_record = [
+        'contextid' => $context->id,
+        'component' => 'tool_copy_courses',
+        'filearea' => 'tempfiles',
+        'itemid' => 0,
+        'filepath' => '/',
+        'filename' => 'copy_courses.json',
+    ];
+
+    $file_storage->create_file_from_string($file_record, $content);
+}
+
+/**
+ * Retornar el contenido del archivo
+ * @return false|string
+ * @throws coding_exception
+ * @throws dml_exception
+ */
+function tool_copy_courses_get_file()
+{
+    $context = context_system::instance();
+    $file_storage = get_file_storage();
+
+    $file_record = [
+        'contextid' => $context->id,
+        'component' => 'tool_copy_courses',
+        'filearea' => 'tempfiles',
+        'itemid' => 0,
+        'filepath' => '/',
+        'filename' => 'copy_courses.json',
+    ];
+
+    $files = $file_storage->get_area_files(
+        $file_record['contextid'],
+        $file_record['component'],
+        $file_record['filearea'],
+        $file_record['itemid'],
+        false
+    );
+
+    foreach ($files as $file) {
+        if ($file->get_filename() === $file_record['filename']) {
+
+            return json_decode($file->get_content(), true);
+        }
+    }
+
+    return false;
+}
+
+/**
+ * Borrar el archivo
+ * @return void
+ * @throws dml_exception
+ */
+function tool_copy_courses_delete_file()
+{
+    $context = context_system::instance();
+    $file_storage = get_file_storage();
+
+    $file_record = [
+        'contextid' => $context->id,
+        'component' => 'tool_copy_courses',
+        'filearea' => 'tempfiles',
+        'itemid' => 0,
+        'filepath' => '/',
+        'filename' => 'copy_courses.json',
+    ];
+    $file = $file_storage->get_file($file_record['contextid'], $file_record['component'], $file_record['filearea'], $file_record['itemid'], $file_record['filepath'], $file_record['filename']);
+
+    if ($file) {
+        $file->delete();
+    }
 }
 
