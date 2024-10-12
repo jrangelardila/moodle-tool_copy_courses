@@ -23,14 +23,16 @@ $PAGE->set_heading(get_string('titlepage', 'tool_copy_courses'));
 
 require_login();
 
-require_login();
+
 if (isguestuser()) {
-    print_error('guestsarenotallowed');
+    throw new moodle_exception('guestsarenotallowed');
 }
 
-if (!has_capability('tool/copy_courses:writeinstance', context_system::instance())) {
-    print_error(get_string('nocapability', 'tool_copy_courses'));
+$context = context_system::instance();
+if (!has_capability('tool/copy_courses:writeinstance', $context)) {
+    throw new moodle_exception('nocapability', 'tool_copy_courses');
 }
+
 
 echo $OUTPUT->header();
 
