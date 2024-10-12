@@ -2,6 +2,9 @@
 
 namespace tool_copy_courses\task;
 
+require_once($CFG->dirroot . '/backup/util/includes/backup_includes.php');
+require_once($CFG->dirroot . '/backup/util/includes/restore_includes.php');
+
 use core\task\asynchronous_copy_task;
 
 class copy_course_task extends asynchronous_copy_task

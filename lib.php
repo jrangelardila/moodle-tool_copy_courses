@@ -1,7 +1,11 @@
 <?php
+
+use tool_copy_courses\managment_copy_courses;
+
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->libdir . '/csvlib.class.php');
+require_once(__DIR__. '/classes/managment_copy_courses.class.php');
 
 /**
  * Plugin administration pages are defined here.
@@ -75,7 +79,7 @@ function tool_copy_courses_execute()
 {
     $data = unserialize(get_config('tool_copy_courses', 'data_validate'));
     foreach ($data as $item) {
-        $copy = new \tool_copy_courses\managment_copy_courses(
+        $copy = new managment_copy_courses(
             $item[0], $item[1], $item[2], $item[3], $item[4], $item[5], $item[6]
         );
 

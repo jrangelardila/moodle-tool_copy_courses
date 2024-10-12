@@ -8,6 +8,9 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+
+use tool_copy_courses\form\form_copy_courses;
+
 require(__DIR__ . '/../../../config.php');
 require('lib.php');
 
@@ -44,7 +47,7 @@ if (optional_param('execute', null, PARAM_BOOL)) {
         ]);
 
 } else {
-    $form = new tool_copy_courses\form\form_copy_courses();
+    $form = new form_copy_courses();
     if ($formdata = $form->get_data()) {
 
         tool_copy_courses_validate_file($form, $formdata);
