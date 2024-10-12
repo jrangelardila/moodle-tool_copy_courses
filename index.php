@@ -54,64 +54,31 @@ if (optional_param('execute', null, PARAM_BOOL)) {
 
         tool_copy_courses_validate_file($form, $formdata);
 
-        echo html_writer::tag("p", get_string('notification_validate', 'tool_copy_courses'), [
-            'class' => 'p m-3'
-        ]);
-        echo html_writer::tag("a", get_string('create_task', 'tool_copy_courses'),
-            [
-                'class' => 'btn btn-primary mr-4',
-                'href' => "?execute=true",
-            ]);
+        $templatecontext = [
+            'notification_validate' => get_string('notification_validate', 'tool_copy_courses'),
+            'create_task' => get_string('create_task', 'tool_copy_courses'),
+            'text_return' => get_string('return_site', 'tool_copy_courses'),
+            'return_site' => new moodle_url('/admin/tool/copy_courses/index.php'),
+        ];
 
-        echo html_writer::tag("a", get_string('return_site', 'tool_copy_courses'),
-            [
-                'class' => 'btn btn-primary',
-                'href' => new moodle_url('/admin/tool/copy_courses/index.php'),
-            ]);
+        echo $OUTPUT->render_from_template('tool_copy_courses/index', $templatecontext);    
+
     } else {
 
         $form->display();
 
-        //field muts the file
-        echo html_writer::tag("p", get_string('indications', 'tool_copy_courses'));
-        echo html_writer::start_div("container mt-5");
+        $data_template = [
+            'indications' => get_string('indications', 'tool_copy_courses'),
+            'copyshortname' => get_string('copyshortname', 'tool_copy_courses'),
+            'fullname' => get_string('fullname', 'tool_copy_courses'),
+            'shortname' => get_string('shortname', 'tool_copy_courses'),
+            'category' => get_string('category', 'tool_copy_courses'),
+            'visible' => get_string('visible', 'tool_copy_courses'),
+            'startdate' => get_string('startdate', 'tool_copy_courses'),
+            'enddate' => get_string('enddate', 'tool_copy_courses'),
+        ];
 
-        echo html_writer::start_div("row border");
-        echo html_writer::tag("div", "copyshortname", ['class' => 'col-3 h4 text-primary  border-right']);
-        echo html_writer::tag("div", get_string('copyshortname', 'tool_copy_courses'), ['class' => 'col-9  font-weight-bold text-dark']);
-        echo html_writer::end_div();
-
-        echo html_writer::start_div("row border");
-        echo html_writer::tag("div", "fullname", ['class' => 'col-3 h4 text-primary  border-right']);
-        echo html_writer::tag("div", get_string('fullname', 'tool_copy_courses'), ['class' => 'col-9  font-weight-bold text-dark']);
-        echo html_writer::end_div();
-
-        echo html_writer::start_div("row border");
-        echo html_writer::tag("div", "shortname", ['class' => 'col-3 h4 text-primary  border-right']);
-        echo html_writer::tag("div", get_string('shortname', 'tool_copy_courses'), ['class' => 'col-9  font-weight-bold text-dark']);
-        echo html_writer::end_div();
-
-        echo html_writer::start_div("row border");
-        echo html_writer::tag("div", "category", ['class' => 'col-3 h4 text-primary  border-right']);
-        echo html_writer::tag("div", get_string('category', 'tool_copy_courses'), ['class' => 'col-9  font-weight-bold text-dark']);
-        echo html_writer::end_div();
-
-        echo html_writer::start_div("row border");
-        echo html_writer::tag("div", "visible", ['class' => 'col-3 h4 text-primary  border-right']);
-        echo html_writer::tag("div", get_string('visible', 'tool_copy_courses'), ['class' => 'col-9  font-weight-bold text-dark']);
-        echo html_writer::end_div();
-
-        echo html_writer::start_div("row border");
-        echo html_writer::tag("div", "startdate", ['class' => 'col-3 h4 text-primary  border-right']);
-        echo html_writer::tag("div", get_string('startdate', 'tool_copy_courses'), ['class' => 'col-9  font-weight-bold text-dark']);
-        echo html_writer::end_div();
-
-        echo html_writer::start_div("row border");
-        echo html_writer::tag("div", "enddate", ['class' => 'col-3 h4 text-primary  border-right']);
-        echo html_writer::tag("div", get_string('enddate', 'tool_copy_courses'), ['class' => 'col-9  font-weight-bold text-dark']);
-        echo html_writer::end_div();
-
-        echo html_writer::end_div();
+        echo $OUTPUT->render_from_template('tool_copy_courses/indications', $data_template);
     }
 }
 

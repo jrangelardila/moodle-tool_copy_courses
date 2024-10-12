@@ -43,7 +43,7 @@ $string['visible_no_validate'] = '<span class="text-danger">Visible solo puede s
 $string['validate'] = '<span class="text-success">Validación correcta</span>';
 $string['dates_not_validates'] = '<span class="text-danger">La fecha de inicio debe ser menor a la fecha de cierre</span>';
 $string['shortname_no_duplicate'] = '<span class="text-danger">Nombre corto duplicado</span>';
-$string['notification_validate'] = "<hr>Tenga en cuenta que al continuar, solo se crearán las tareas para los cursos que pasaron la validación";
+$string['notification_validate'] = "Tenga en cuenta que al continuar, solo se crearán las tareas para los cursos que pasaron la validación";
 $string['create_task'] = 'Crear tareas';
 $string['finaly_notification'] = 'Las tareas han sido creadas';
 $string['return_site'] = 'Volver';

@@ -43,7 +43,7 @@ $string['visible_no_validate'] = '<span class="text-danger">Visible can only be 
 $string['validate'] = '<span class="text-success">Validation successful</span>';
 $string['dates_not_validates'] = '<span class="text-danger">The start date must be earlier than the end date</span>';
 $string['shortname_no_duplicate'] = '<span class="text-danger">Duplicate shortname</span>';
-$string['notification_validate'] = "<hr>Note that by continuing, tasks will only be created for the courses that passed the validation";
+$string['notification_validate'] = "Note that by continuing, tasks will only be created for the courses that passed the validation";
 $string['create_task'] = 'Create Tasks';
 $string['finaly_notification'] = 'Tasks have been created';
 $string['return_site'] = 'Return';
