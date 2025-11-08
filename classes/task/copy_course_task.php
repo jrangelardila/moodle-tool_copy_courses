@@ -27,9 +27,42 @@ class copy_course_task extends asynchronous_copy_task
 
         $course->shortname = $this->get_custom_data()->shortname;
         $course->fullname = $this->get_custom_data()->fullname;
+        $this->add_methods_enrol($this->get_custom_data()->enrols, $course);
 
         $DB->update_record('course', $course);
         mtrace("Coursed updated...");
+    }
+
+    /**
+     * Add methods enrol, in restaured course
+     *
+     * @throws \coding_exception
+     */
+    public function add_methods_enrol($enrols, $course)
+    {
+        if ($enrols != null || $enrols != "") {
+            foreach (array_map('trim', explode(',', $enrols)) as $method) {
+                $plugin = enrol_get_plugin($method);
+                $instances = enrol_get_instances($course->id, true);
+                $exists = false;
+                mtrace("Method: $method");
+                foreach ($instances as $instance) {
+                    if ($instance->enrol === $method) {
+                        mtrace("Method $method already exists, in course {$course->id}");
+                        $exists = true;
+                    }
+                    break;
+                }
+                if (!$exists) {
+                    $instanceid = $plugin->add_instance($course, [
+                        'status' => ENROL_INSTANCE_ENABLED,
+                    ]);
+                    mtrace("Method $method was add in course {$course->id}, ID: $instanceid");
+                }
+            }
+        } else {
+            mtrace("This course, no containd enrols....");
+        }
     }
 
 }

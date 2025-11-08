@@ -27,15 +27,21 @@ class managment_copy_courses
     public $enddate;
     public $idnumber;
     public $userdata;
+    public $enrols;
     public $keptroles;
 
     public static $validator = [
-        0 => "category", 1 => "copyshortname",
-        2 => "enddate", 3 => "fullname",
-        4 => "shortname", 5 => "startdate", 6 => "visible"
+        0 => "category",
+        1 => "copyshortname",
+        2 => "enddate",
+        3 => "enrols",
+        4 => "fullname",
+        5 => "shortname",
+        6 => "startdate",
+        7 => "visible",
     ];
 
-    public function __construct($category, $copyshortname, $enddate, $fullname, $shortname, $startdate, $visible)
+    public function __construct($category, $copyshortname, $enddate, $enrols, $fullname, $shortname, $startdate, $visible)
     {
         $this->category = $category;
         $this->courseid = self::get_course_by_shortname($copyshortname)->id;
@@ -44,6 +50,7 @@ class managment_copy_courses
         $this->shortname = $shortname;
         $this->startdate = strtotime($startdate);
         $this->visible = $visible;
+        $this->enrols = $enrols;
         //Valores default
         $this->userdata = [];
         $this->idnumber = "";
@@ -86,6 +93,7 @@ class managment_copy_courses
         $copyids['shortname'] = $this->shortname;
         $copyids['fullname'] = $this->fullname;
         $copyids['new_courseid'] = $newcourseid;
+        $copyids['enrols'] = $this->enrols;
 
         $bc->set_status(\backup::STATUS_AWAITING);
         $bc->get_status();
@@ -121,6 +129,7 @@ class managment_copy_courses
         $obj->idnumber = $this->idnumber;
         $obj->userdata = $this->userdata;
         $obj->keptroles = $this->keptroles;
+        $obj->enrols = $this->enrols;
 
         return $obj;
     }
@@ -146,13 +155,11 @@ class managment_copy_courses
             return [$cell, false];
         }
         //Comprobar que la categoria exista
-
         $category = $DB->get_record('course_categories', array('id' => $row[0]));
         if (!$category) {
             $cell->text = get_string('cat_no_validate', 'tool_copy_courses');
             return [$cell, false];
         }
-
         //Comprobar que el campo copyshortname pasado exista el curso
         if (!self::get_course_by_shortname(($row[1]))) {
             $cell->text = get_string('courseid_no_validate', 'tool_copy_courses');
@@ -165,23 +172,23 @@ class managment_copy_courses
             return [$cell, false];
         }
         //Comprobar que el fullname no este vacio
-        if (strlen($row[3]) == 0) {
+        if (strlen($row[4]) == 0) {
             $cell->text = get_string('fullname_no_validate', 'tool_copy_courses');
             return [$cell, false];
         }
         //Comprobar que el shortname de curso, no existe
-        if (self::get_course_by_shortname(($row[4]))) {
+        if (self::get_course_by_shortname(($row[5]))) {
             $cell->text = get_string('shortname_no_validate', 'tool_copy_courses');
             return [$cell, false];
         }
         //Comprobar el startdate, sea valido
-        $timestamp_startdate = strtotime($row[5]);
+        $timestamp_startdate = strtotime($row[6]);
         if (!$timestamp_startdate) {
             $cell->text = get_string('startdate_no_validate', 'tool_copy_courses');
             return [$cell, false];
         }
         //Comprobar que visible, sea 0 o 1
-        if ($row[6] != 0 && $row[6] != 1) {
+        if ($row[7] != 0 && $row[7] != 1) {
             $cell->text = get_string('visible_no_validate', 'tool_copy_courses');
             return [$cell, false];
         }
@@ -191,10 +198,20 @@ class managment_copy_courses
             return [$cell, false];
         }
         //Comprobar que no se hubiera enviado más de un shortname igual
-        $columna = array_column($data, 4);
-        if (in_array($row[4], $columna)) {
+        $columna = array_column($data, 5);
+        if (in_array($row[5], $columna)) {
             $cell->text = get_string('shortname_no_duplicate', 'tool_copy_courses');
             return [$cell, false];
+        }
+        //Validator enrol metods
+        if ($row[3] != null || $row[3] != "") {
+            foreach (array_map('trim', explode(',', $row[3])) as $method) {
+                $plugin = enrol_get_plugin($method);
+                if (!$plugin) {
+                    $cell->text = get_string('not_exists_enrol', 'tool_copy_courses', ['method' => $method]);
+                    return [$cell, false];
+                }
+            }
         }
 
         $cell->text = get_string('validate', 'tool_copy_courses');

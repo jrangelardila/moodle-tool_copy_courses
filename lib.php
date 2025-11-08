@@ -92,7 +92,14 @@ function tool_copy_courses_execute()
     $data = tool_copy_courses_get_file();
     foreach ($data as $item) {
         $copy = new managment_copy_courses(
-            $item[0], $item[1], $item[2], $item[3], $item[4], $item[5], $item[6]
+            category: $item[0],
+            copyshortname: $item[1],
+            enddate: $item[2],
+            enrols: $item[3],
+            fullname: $item[4],
+            shortname: $item[5],
+            startdate: $item[6],
+            visible: $item[7]
         );
 
         $copy->created_task();

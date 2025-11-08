@@ -43,6 +43,7 @@ $string['visible_no_validate'] = '<span class="text-danger">Visible can only be 
 $string['validate'] = '<span class="text-success">Validation successful</span>';
 $string['dates_not_validates'] = '<span class="text-danger">The start date must be earlier than the end date</span>';
 $string['shortname_no_duplicate'] = '<span class="text-danger">Duplicate shortname</span>';
+$string['enrols'] = 'Enrolment methods for the copied course. This field is optional.';
 $string['notification_validate'] = "Note that by continuing, tasks will only be created for the courses that passed the validation";
 $string['create_task'] = 'Create Tasks';
 $string['finaly_notification'] = 'Tasks have been created';
@@ -56,4 +57,5 @@ $string['category'] = 'Is the category id for the new course.';
 $string['visible'] = 'Indicates whether the new course should be visible or not. Use 1 for visible, 0 for hidden.';
 $string['startdate'] = 'Is the start date of the course, for example: 2024-09-15 15:00:00.';
 $string['enddate'] = 'Is the end date of the course, for example: 2024-12-15 15:00:00.';
+$string['not_exists_enrol'] = 'Method not exists: <span style="color:#920020;">{$a->method}</span>';
 

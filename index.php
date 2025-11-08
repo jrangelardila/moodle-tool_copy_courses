@@ -76,6 +76,7 @@ if (optional_param('execute', null, PARAM_BOOL)) {
             'visible' => get_string('visible', 'tool_copy_courses'),
             'startdate' => get_string('startdate', 'tool_copy_courses'),
             'enddate' => get_string('enddate', 'tool_copy_courses'),
+            'enrols' => get_string('enrols', 'tool_copy_courses'),
         ];
 
         echo $OUTPUT->render_from_template('tool_copy_courses/indications', $data_template);
