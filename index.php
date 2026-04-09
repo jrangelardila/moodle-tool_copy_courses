@@ -37,6 +37,7 @@ if (!has_capability('tool/copy_courses:writeinstance', $context)) {
 echo $OUTPUT->header();
 
 if (optional_param('execute', null, PARAM_BOOL)) {
+    require_sesskey();
     tool_copy_courses_execute();
 
     echo html_writer::tag("p", get_string('finaly_notification', 'tool_copy_courses'), [
