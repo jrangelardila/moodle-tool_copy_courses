@@ -1,4 +1,19 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * Plugin administration pages are defined here.
  *
@@ -150,12 +165,12 @@ class managment_copy_courses
         $cell = new \html_table_cell();
 
         //Comprobar que el campo cat sea numerico
-        if (!is_number($row[0])) {
-            $cell->text = get_string('cat_no_validate', 'tool_copy_courses');
-            return [$cell, false];
+        if (is_number($row[0])) {
+            $category = $DB->get_record('course_categories', array('id' => $row[0]));
+        } else {
+            $category = $DB->get_record('course_categories', array('idnumber' => $row[0]));
         }
         //Comprobar que la categoria exista
-        $category = $DB->get_record('course_categories', array('id' => $row[0]));
         if (!$category) {
             $cell->text = get_string('cat_no_validate', 'tool_copy_courses');
             return [$cell, false];
