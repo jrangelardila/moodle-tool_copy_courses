@@ -1,4 +1,19 @@
 <?php
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 /**
  * Plugin administration pages are defined here.
  *
@@ -20,9 +35,7 @@ $PAGE->set_context(context_system::instance());
 $PAGE->set_title(get_string('titlepage', 'tool_copy_courses'));
 $PAGE->set_heading(get_string('titlepage', 'tool_copy_courses'));
 
-
 require_login();
-
 
 if (isguestuser()) {
     throw new moodle_exception('guestsarenotallowed');
@@ -41,9 +54,9 @@ if (optional_param('execute', null, PARAM_BOOL)) {
     tool_copy_courses_execute();
 
     echo html_writer::tag("p", get_string('finaly_notification', 'tool_copy_courses'), [
-        'class' => 'p m-3'
+        'class' => 'p m-3',
     ]);
-    echo html_writer::tag("a", get_string('return_site', 'tool_copy_courses'),
+    echo html_writer::tag("a", get_string('return', 'tool_copy_courses'),
         [
             'class' => 'btn btn-primary',
             'href' => new moodle_url('/admin/tool/copy_courses/index.php'),
@@ -56,10 +69,7 @@ if (optional_param('execute', null, PARAM_BOOL)) {
         tool_copy_courses_validate_file($form, $formdata);
 
         $templatecontext = [
-            'notification_validate' => get_string('notification_validate', 'tool_copy_courses'),
-            'create_task' => get_string('create_task', 'tool_copy_courses'),
-            'text_return' => get_string('return_site', 'tool_copy_courses'),
-            'return_site' => new moodle_url('/admin/tool/copy_courses/index.php'),
+            'return_url' => (new moodle_url('/admin/tool/copy_courses/index.php'))->out(),
         ];
 
         echo $OUTPUT->render_from_template('tool_copy_courses/index', $templatecontext);
@@ -68,7 +78,7 @@ if (optional_param('execute', null, PARAM_BOOL)) {
 
         $form->display();
 
-        $data_template = [
+        $datatemplate = [
             'indications' => get_string('indications', 'tool_copy_courses'),
             'copyshortname' => get_string('copyshortname', 'tool_copy_courses'),
             'fullname' => get_string('fullname', 'tool_copy_courses'),
@@ -80,7 +90,7 @@ if (optional_param('execute', null, PARAM_BOOL)) {
             'enrols' => get_string('enrols', 'tool_copy_courses'),
         ];
 
-        echo $OUTPUT->render_from_template('tool_copy_courses/indications', $data_template);
+        echo $OUTPUT->render_from_template('tool_copy_courses/indications', $datatemplate);
     }
 }
 

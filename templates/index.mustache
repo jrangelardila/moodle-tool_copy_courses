@@ -1,10 +1,38 @@
-<hr/>
-<p class="p m-3">{{notification_validate}}</p>
+{{!
+    This file is part of Moodle - http://moodle.org/
 
-<a class="btn btn-primary mr-4" href="?execute=true">
-    {{create_task}}
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template tool_copy_courses/index
+
+    TODO describe template test
+
+    Example context (json):
+    {
+        "sesskey": "sesskey"
+    }
+}}
+
+<div class="alert alert-info mt-4" role="alert">
+    {{#str}} notification_validate, tool_copy_courses {{/str}}
+</div>
+
+<a class="btn btn-primary me-4" href="?execute=true&sesskey={{sesskey}}"">
+    {{#str}} create_task, tool_copy_courses {{/str}}
 </a>
 
 <a class="btn btn-primary" href="{{{return_site}}}">
-    {{text_return}}
+    {{#str}} return, tool_copy_courses {{/str}}
 </a>
