@@ -69,6 +69,7 @@ if (optional_param('execute', null, PARAM_BOOL)) {
         tool_copy_courses_validate_file($form, $formdata);
 
         $templatecontext = [
+            'sesskey'    => sesskey(),
             'return_url' => (new moodle_url('/admin/tool/copy_courses/index.php'))->out(),
         ];
 
